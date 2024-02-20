@@ -32,9 +32,6 @@ def count_friendly_elements(matrix):
     
     return friendly_count
 
-matrix = [
-    [1, 1, 0],
-    [0, 1, 0],
-    [0, 0, 1]
-]
+with open('input.txt', 'r') as file:
+    matrix = [list(map(int, line.split())) for line in file]
 print(count_friendly_elements(matrix))
