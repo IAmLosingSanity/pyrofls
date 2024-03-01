@@ -1,0 +1,2 @@
+int variable = 5;    
+variable = variable + 1;
