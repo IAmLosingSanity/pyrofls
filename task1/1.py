@@ -19,7 +19,7 @@ def findLongest(nums):
 
     return longest
 
-def longest_nondecreasing_subsequence(lst):
+def findLongest2(lst):
     max_length = 0
     max_sum = float('-inf')
     max_sequence = []
@@ -35,11 +35,9 @@ def longest_nondecreasing_subsequence(lst):
                     max_sequence = lst[i:j+1]
     return max_sequence
     
-
-
-with open('input.txt', 'r') as file:
+with open('input1.txt', 'r') as file:
     nums = [int(symbol) for symbol in list(file.readline().strip())]
 
 print(len(nums))
 print(findLongest(nums))
-print(longest_nondecreasing_subsequence(nums))
+print(findLongest2(nums))

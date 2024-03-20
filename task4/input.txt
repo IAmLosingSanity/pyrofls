@@ -1,2 +1,2 @@
-int variable = 5;    
-variable = variable + 1;
+int variable = 5; 
+variable= variable+ 1;
