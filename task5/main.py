@@ -8,6 +8,7 @@ class MatrixWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.matrix = self.generate_random_matrix(15, 10)
+        #self.matrix = self.generateConstantMatrix()
         self.frame_pos = (0, 0)
         self.square_size = 100
         self.padding = 5
@@ -17,10 +18,22 @@ class MatrixWindow(QMainWindow):
         self.column_counter_label.move(10, 0)
         self.column_counter_label.show()
 
+        #self.shuffling()
+
     def generate_random_matrix(self, red_count, yellow_count):
         colors = ['red'] * red_count + ['yellow'] * yellow_count
         random.shuffle(colors)
         return [colors[i:i+5] for i in range(0, 25, 5)]
+    
+    def generateConstantMatrix(self):
+        colors = (['red'] * 3 + ['yellow'] * 2) *5
+        return [colors[i:i+5] for i in range(0, 25, 5)]
+    
+    def shuffling(self):
+        self.rotate_frame(clockwise=True)
+        self.move_frame(0, 1)
+        self.rotate_frame(clockwise=False)
+
 
     def initUI(self):
         self.setWindowTitle('Квадротека')
