@@ -22,11 +22,12 @@ def index():
     currencies = get_currencies()
     return render_template('index.html', currencies=currencies)
 
-@app.route('/currency_rate')
+@app.route('/currency_rate', methods=['GET', 'POST'])
 def get_currency_rate():
-    # Получаем параметры даты и идентификатора валюты из запроса
     date_req = request.args.get('date', default='02/03/2002')
     value_id = request.args.get('value_id', default=None)
+    amount = request.form.get('amount', type=float, default=1.0)
+    conversion_result = None
 
     if not value_id:
         abort(400, description="Please provide value_id parameter.")
@@ -36,16 +37,20 @@ def get_currency_rate():
     xml_data = response.content
 
     root = ET.fromstring(xml_data)
-    # Ищем валюту по ValueID
     for valute in root.findall('.//Valute'):
         if valute.get('ID') == value_id:
-            nominal = float(valute.find('Nominal').text)
+            nominal = float(valute.find('Nominal').text.replace(',', '.'))
             value = float(valute.find('Value').text.replace(',', '.'))
             rate = value / nominal
             char_code = valute.find('CharCode').text
-            return f"Курс {char_code} на {root.attrib['Date']}: {rate}"
+            if request.method == 'POST':
+                conversion_result = rate * amount
+            return render_template('currency_rate.html', rate=rate, char_code=char_code, date=root.attrib['Date'], conversion_result=conversion_result, amount=amount)
 
     return "Currency with the provided ValueID not found.", 404
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 def get_currencies():
     url = 'http://www.cbr.ru/scripts/XML_val.asp?d=0'
