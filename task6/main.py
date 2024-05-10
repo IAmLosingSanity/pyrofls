@@ -8,8 +8,8 @@ app = Flask(__name__)
 def index():
     if request.method == 'POST':
         # Получаем данные из формы
-        day = request.form.get('day')
-        month = request.form.get('month')
+        day = request.form.get('day').zfill(2)
+        month = request.form.get('month').zfill(2)
         year = request.form.get('year')
         value_id = request.form.get('currency')
 
@@ -44,7 +44,7 @@ def get_currency_rate():
             rate = value / nominal
             char_code = valute.find('CharCode').text
             if request.method == 'POST':
-                conversion_result = rate * amount
+                conversion_result = round(rate * amount, 4)
             return render_template('currency_rate.html', rate=rate, char_code=char_code, date=root.attrib['Date'], conversion_result=conversion_result, amount=amount)
 
     return "Currency with the provided ValueID not found.", 404
