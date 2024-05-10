@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import requests
 import xml.etree.ElementTree as ET
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -8,13 +9,11 @@ app = Flask(__name__)
 def index():
     if request.method == 'POST':
         # Получаем данные из формы
-        day = request.form.get('day').zfill(2)
-        month = request.form.get('month').zfill(2)
-        year = request.form.get('year')
+        date = request.form.get('date')
         value_id = request.form.get('currency')
 
         # Форматируем дату в нужный формат
-        date_req = f"{day}/{month}/{year}"
+        date_req = datetime.strptime(date, '%Y-%m-%d').strftime('%d/%m/%Y')
 
         return redirect(url_for('get_currency_rate', date=date_req, value_id=value_id))
 
